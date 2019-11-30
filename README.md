@@ -59,7 +59,7 @@ y axis corresponds to usage data.
 
 As far as usage data are heterogeneous we need to scale the y axis to have a consistent view independently of the clients data.
 
-Possible improvents: 
+Possible improvements: 
 
 - Currently due to time limitations we load data all at once. This can be improved by lazy loading only the data we need for visualization. 
 
