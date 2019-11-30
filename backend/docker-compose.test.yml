@@ -1,0 +1,37 @@
+version: '2'
+
+services:
+    sg-api:
+        build:
+          context: .
+          dockerfile: Dockerfile.test
+
+        logging:
+          driver: json-file
+          options:
+              max-size: "10m"
+              max-file: "5"
+
+        environment:
+            - SECRET
+            - DEBUG=true
+            - MONGO_URI=mongodb://mongo-test:27017
+            - DB_NAME=sg-test
+            - MODE=testing
+        depends_on:
+          - mongo-test
+        networks:
+          -  integration-tests-sg-net
+
+    mongo-test:
+      image: mongo:3.4
+      hostname: mongo-test
+      environment:
+        SECRET: secret
+      restart: on-failure
+      networks:
+        - integration-tests-sg-net
+
+networks:
+  integration-tests-sg-net:
+    driver: bridge

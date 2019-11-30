@@ -1,0 +1,47 @@
+version: '3'
+
+services:
+    api:
+        image: basilboli/sg-api
+        restart: always
+        ports:
+          - 8080:8080
+        logging:
+          driver: json-file
+          options:
+              max-size: "10m"
+              max-file: "5"              
+        environment:
+            - SECRET
+            - DEBUG=true
+            - MONGO_URI=mongodb://mongodb:27017
+            - DB_NAME=sg
+        networks:
+            - sg-net         
+    web:
+        image: basilboli/sg-web
+        ports:
+          - 80:80
+        environment:
+          - REACT_APP_ENV=production
+          - API_HOST=sg-api
+    mongodb:
+        image: mongo:3.4
+        restart: always
+        environment:
+        - FOO=bar   
+        networks:
+        - sg-net         
+
+    mongo_seed:
+        image: mongo:3.4
+        links:
+        - mongodb
+        volumes:
+        - ./mongo-seed:/mongo-seed
+        command: /mongo-seed/import.sh
+        networks:
+            - sg-net
+networks:
+  sg-net:
+    driver: bridge

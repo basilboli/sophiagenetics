@@ -1,0 +1,40 @@
+
+# This workflow will build a docker container, publish it to Google Container Registry, and deploy it to GKE.
+#
+# To configure this workflow:
+# 1. Set up secrets in your workspace: GKE_PROJECT with the name of the project, GKE_EMAIL with the service account email, GKE_KEY with the service account key.
+# 2. Change the values for the GKE_ZONE, GKE_CLUSTER and IMAGE environment variables (below).
+
+name: deploy
+
+on: push
+
+# Environment variables available to all jobs and steps in this workflow
+env:
+  GITHUB_SHA: ${{ github.sha }}
+  IMAGE: docker.pkg.github.com/basilboli/sg/api
+
+jobs:
+  setup-test-build-publish-deploy:
+    name: Setup, Test, Build, Publish, and Deploy
+    runs-on: ubuntu-latest
+    steps:
+
+    # Checkout latest master
+    - name: Checkout
+      uses: actions/checkout@master    
+
+    # Run integration tests
+    - name: Test
+      run: docker-compose -f docker-compose.test.yml up --abort-on-container-exit
+    
+    # Build image
+    - name: Build
+      run: |
+        docker build --file Dockerfile -t $IMAGE:$GITHUB_SHA .
+    
+    # Push the Docker image to Google Container Registry
+    - name: Publish
+      run: |
+        docker push $IMAGE:$GITHUB_SHA
+      # Deploy the Docker image as Github package

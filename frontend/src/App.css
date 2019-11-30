@@ -1,0 +1,23 @@
+.App-links {
+  word-wrap: break-word;
+}
+
+.App-link {
+  color: #09d3ac;
+  margin-left: 10px;
+}
+
+.App-chart-header {
+  font-size: x-small;
+}
+
+.App-axis {
+  font-size: xx-small;
+}
+
+.App-title-header {
+  color: grey;
+  align-items: left;
+  display: flex;
+  flex-direction: column;
+}

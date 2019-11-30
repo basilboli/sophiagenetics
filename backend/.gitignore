@@ -1,0 +1,16 @@
+tags
+*.cov
+.cover
+cover.out
+target
+*.xls
+*.xlsx
+*.bdb
+var/
+bin/
+.vscode/
+.idea/
+node_modules/
+build
+frontend/build
+frontend/node_modules
