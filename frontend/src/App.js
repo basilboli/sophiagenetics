@@ -11,6 +11,8 @@ class App extends Component {
 
   // fetch all necessary data
   componentDidMount() {
+    // use different host name for product deployment
+    // TODO use proper dns naming like api.something.com/clients instead
     fetch('http://localhost:8080/clients')
       .then(res => res.json())
       .then(clients => {
@@ -42,7 +44,7 @@ class App extends Component {
                 <h1>Task: Data Visualisation</h1>
                 
                 Made by <a href="https://basilboli.keybase.pub/">Vasyl Vaskul</a><br/>
-                <a href="https://github.com/basiboli/sophiagenetics">Link to the code</a>
+                <a href="https://github.com/basilboli/sophiagenetics">Link to the code</a>
               </div>
             )} />
             <Route exact={true} path="/clients" render={() => (
