@@ -5,7 +5,7 @@ see assets/task.pdf
 
 ## Demo version 
 
-Please take a look at deployed [demo](http://206.189.114.13).
+Please take a look at deployed [demo](http://206.189.114.13/clients).
 
 ## How to build / run
 
