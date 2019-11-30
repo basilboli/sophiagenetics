@@ -11,7 +11,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-// Client structure represents client entity
+// Client structure represents client entity described in the task
 type Client struct {
 	SalesforceID   int32   `json:"salesforceId" bson:"salesforceId"`
 	Country        string  `json:"country,omitempty"`
@@ -21,7 +21,7 @@ type Client struct {
 	ActualUsage    []int64 `json:"actualUsage,omitempty"`
 }
 
-// DB represents database client
+// DB represents database client and options
 type DB struct {
 	Opts   *Opts
 	client *mongo.Client
@@ -36,7 +36,7 @@ type Opts struct {
 	CommitHash string `long:"commit_hash" env:"COMMIT_HASH" description:"app commit hash" default:""`
 }
 
-// DefaultOpts represents default options (used to run locally)
+// DefaultOpts represents default options (used to run application tests locally)
 func DefaultOpts() *Opts {
 	mongoUri := os.Getenv("MONGO_URI")
 	dbName := os.Getenv("DB_NAME")
@@ -54,7 +54,7 @@ func DefaultOpts() *Opts {
 
 }
 
-//NewDB creates new database client
+// NewDB creates new database client
 func NewDB(opts *Opts) (*DB, error) {
 
 	// Set client options
@@ -81,8 +81,8 @@ func NewDB(opts *Opts) (*DB, error) {
 	return &DB{client: client, Opts: opts}, nil
 }
 
+//Cleanup test data (used in testing)
 func (s *DB) Cleanup() error {
-	// cleanup data (used in testing)
 	clientsCollection := s.client.Database(s.Opts.DBName).Collection("clients")
 	_, err := clientsCollection.DeleteMany(context.Background(), bson.D{{}})
 	if err != nil {
@@ -91,7 +91,7 @@ func (s *DB) Cleanup() error {
 	return nil
 }
 
-// NewClient endpoint to create new client
+// NewClient creates new client
 func (s *DB) NewClient(client *Client) (*Client, error) {
 	collection := s.client.Database(s.Opts.DBName).Collection("clients")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
@@ -103,7 +103,7 @@ func (s *DB) NewClient(client *Client) (*Client, error) {
 	return client, nil
 }
 
-// NewClient endpoint to get all clients
+// NewClient returns all clients
 func (s *DB) ListClients() ([]*Client, error) {
 	collection := s.client.Database(s.Opts.DBName).Collection("clients")
 
@@ -146,7 +146,7 @@ func (s *DB) ListClients() ([]*Client, error) {
 	return results, nil
 }
 
-// NewClient endpoint to get client by id
+// NewClient gets client by id
 func (s *DB) GetClient(id int64) (*Client, error) {
 	collection := s.client.Database(s.Opts.DBName).Collection("clients")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)

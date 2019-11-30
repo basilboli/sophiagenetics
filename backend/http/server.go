@@ -16,6 +16,7 @@ import (
 	"github.com/go-chi/chi"
 )
 
+// server structure represents contains database client and http router
 type server struct {
 	Db     *db.DB
 	router *chi.Mux
@@ -34,7 +35,7 @@ func NewServer() *server {
 	s.router.Use(middleware.RequestID)
 	s.router.Use(middleware.Recoverer)
 
-	// Basic CORS
+	// Adding CORS middleware
 	_cors := cors.New(cors.Options{
 		// AllowedOrigins: []string{"https://foo.com"}, // Use this to allow specific origin hosts
 		AllowedOrigins: []string{"*"},
@@ -67,7 +68,7 @@ func (s *server) handleIndex(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write([]byte("Hello SOPHiA GENETICS!"))
 }
 
-// e.g. http.HandleFunc("/health-check", handleHealthCheck)
+// handleHealthCheck handles endpoint to be used by external health check system
 func (s *server) handleHealthCheck(w http.ResponseWriter, r *http.Request) {
 	// A very simple health check.
 	w.WriteHeader(http.StatusOK)
@@ -78,6 +79,7 @@ func (s *server) handleHealthCheck(w http.ResponseWriter, r *http.Request) {
 	_, _ = io.WriteString(w, `{"alive": true}`)
 }
 
+// handleVersion handles endpoint exposing application version
 func (s *server) handleVersion(w http.ResponseWriter, r *http.Request) {
 	_, err := w.Write([]byte(fmt.Sprintf("Commit hash: %s\nBuild time: %s", s.Db.Opts.CommitHash, s.Db.Opts.BuildTime)))
 	if err != nil {
@@ -85,6 +87,7 @@ func (s *server) handleVersion(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// handleListClients handles endpoint showing all clients data
 func (s *server) handleListClients(w http.ResponseWriter, r *http.Request) {
 	polls, err := s.Db.ListClients()
 	if err != nil {
@@ -97,6 +100,7 @@ func (s *server) handleListClients(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// handleCreateClient handles endpoint to create new client
 func (s *server) handleCreateClient() http.HandlerFunc {
 
 	type response struct {
@@ -122,6 +126,7 @@ func (s *server) handleCreateClient() http.HandlerFunc {
 
 }
 
+// handleCreateClient handles endpoint to get client data by saleforceId
 func (s *server) handleGetClient(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	value := "client"
@@ -137,6 +142,7 @@ func (s *server) handleGetClient(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// ClientCtx gets and stores client data in context
 func (s *server) ClientCtx(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		param := chi.URLParam(r, "id")

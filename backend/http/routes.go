@@ -26,7 +26,7 @@ func (s *server) routes() {
 }
 
 // paginate is a stub, but very possible to implement middleware logic
-// to handle the request params for handling a paginated request.
+// to handle the request params for handling a paginated request
 func paginate(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// just a stub.. some ideas are to look at URL query params for something like

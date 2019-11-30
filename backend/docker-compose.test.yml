@@ -1,3 +1,7 @@
+# this docker-compose file for interation testing
+# under the hood we run two containers: test mongodb database and go tests 
+# see Dockerfile.test
+
 version: '2'
 
 services:

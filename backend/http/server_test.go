@@ -26,6 +26,7 @@ func setup(t *testing.T) (*DB, func()) {
 	}
 }
 
+//TestHealthCheckHandler tests health check endpoint
 func TestHealthCheckHandler(t *testing.T) {
 	// Create a request to pass to our handler. We don't have any query parameters for now, so we'll
 	// pass 'nil' as the third parameter.
@@ -43,13 +44,13 @@ func TestHealthCheckHandler(t *testing.T) {
 	// directly and pass in our Request and ResponseRecorder.
 	handler.ServeHTTP(rr, req)
 
-	// Check the status code is what we expect.
+	// Check the status code is what we expect
 	if status := rr.Code; status != http.StatusOK {
 		t.Errorf("handler returned wrong status code: got %v want %v",
 			status, http.StatusOK)
 	}
 
-	// Check the response body is what we expect.
+	// Check the response body is what we expect
 	expected := `{"alive": true}`
 	if rr.Body.String() != expected {
 		t.Errorf("handler returned unexpected body: got %v want %v",
@@ -57,6 +58,7 @@ func TestHealthCheckHandler(t *testing.T) {
 	}
 }
 
+//TestHandleIndex tests index page
 func TestHandleIndex(t *testing.T) {
 
 	is := is.New(t)
@@ -68,9 +70,11 @@ func TestHandleIndex(t *testing.T) {
 	is.NoErr(err)
 	w := httptest.NewRecorder()
 	srv.ServeHTTP(w, req)
+	// Check the response status code is what we expect
 	is.Equal(w.Code, http.StatusOK)
 }
 
+//TestNotFound tests that non existing page request returns 404
 func TestNotFound(t *testing.T) {
 
 	is := is.New(t)
@@ -85,6 +89,7 @@ func TestNotFound(t *testing.T) {
 	is.Equal(w.Code, http.StatusNotFound)
 }
 
+//TestEmptyClientsList tests when on empty database empty client list is returned
 func TestEmptyClientsList(t *testing.T) {
 
 	is := is.New(t)
@@ -100,6 +105,7 @@ func TestEmptyClientsList(t *testing.T) {
 	is.Equal(w.Body.String(), "[]\n")
 }
 
+//TestNewClient tests that when creating new client all the fields are properly set
 func TestNewClient(t *testing.T) {
 
 	is := is.New(t)

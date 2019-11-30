@@ -11,6 +11,7 @@ import (
 	"rsc.io/quote"
 )
 
+// BuildTime and CommitHash are used by /version endpoint
 var (
 	BuildTime  string
 	CommitHash string
@@ -20,11 +21,15 @@ func main() {
 
 	log.Println(quote.Go())
 	var opts db.Opts
+
+	// parse application flags
 	if _, err := flags.Parse(&opts); err != nil {
 		os.Exit(1)
 	}
 
 	log.Printf("Options: %#v\n", opts)
+
+	// set BuildTime and CommitHash passed as build arguments
 	opts.BuildTime = BuildTime
 	opts.CommitHash = CommitHash
 
@@ -38,6 +43,6 @@ func main() {
 		log.Fatal(err)
 	}
 	srv.Db = mydb
-	log.Println("Hooray. API runs locally at http://localhost:8080")
+	log.Println("Hooray. API runs at http://localhost:8080")
 	log.Fatal(http.ListenAndServe(":8080", srv))
 }

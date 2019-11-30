@@ -8,7 +8,7 @@ const HistogramChart = (props) => {
     var width = 250;
     var height = 100;
     
-    // let's calculate min/max value for y axis
+    // let's use max value to properly scale y axis
     let yDomain = [0, props.max];
 
     let yScale = scaleLinear()

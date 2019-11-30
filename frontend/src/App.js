@@ -9,6 +9,7 @@ class App extends Component {
     clients: null
   }
 
+  // fetch all necessary data
   componentDidMount() {
     fetch('http://localhost:8080/clients')
       .then(res => res.json())
@@ -41,7 +42,7 @@ class App extends Component {
                 <h1>Task: Data Visualisation</h1>
                 
                 Made by <a href="https://basilboli.keybase.pub/">Vasyl Vaskul</a><br/>
-                <a href="https://github.com/basiboli/sg">Link to code</a>
+                <a href="https://github.com/basiboli/sophiagenetics">Link to the code</a>
               </div>
             )} />
             <Route exact={true} path="/clients" render={() => (
@@ -71,8 +72,8 @@ class App extends Component {
 
 
 const Client = ({ client }) => {
-  console.log("Client:", client)
   let allUsages = [...client.actualUsage, ...client.predictedUsage];
+  // we calculate max of actualUsage and predictedUsage to make graph y axis consistent
   let max = Math.max(...allUsages.map(item => item));
 
   return (
